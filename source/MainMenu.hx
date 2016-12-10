@@ -23,6 +23,8 @@ class MainMenu extends GameState {
   
   private function drawMenu():Void {
     verticalIndex = 0;
+    width = Lib.current.stage.stageWidth;
+    height = Lib.current.stage.stageHeight;
     addLogo();
     addButtons();
   }
@@ -30,7 +32,7 @@ class MainMenu extends GameState {
   private function addLogo():Void {
     // Scale the logo to fit on the stage.
     var logo:BitmapData = Assets.getBitmapData("assets/logo.png");
-    var scale:Float = Lib.current.stage.stageWidth / logo.width;
+    var scale:Float = width / logo.width;
     var matrix:Matrix = new Matrix();
     var scaledLogo:BitmapData =
         new BitmapData(Math.floor(logo.width * scale),
@@ -38,16 +40,30 @@ class MainMenu extends GameState {
                        true, 0x000000);
     matrix.scale(scale, scale);
     scaledLogo.draw(logo, matrix, null, null, null, true);
-    // Show the scaled logo.
+    // Display the scaled logo.
     addChild(new Bitmap(scaledLogo));
     verticalIndex += logo.height * scale;
   }
 
   private function addButtons():Void {
-    var playButton:Button = new Button("Play!");
-    playButton.x = (Lib.current.stage.stageWidth - playButton.width) / 2;
-    playButton.y = verticalIndex;
-    addChild(playButton);
-    verticalIndex += playButton.height + 2;
+    // Make all the buttons.
+    var buttons:Array<Button> =
+        [new Button("Play!", onPlayPressed),
+         new Button("Leaderboard", onLeaderboardPressed)];
+    // Display them all.
+    for (button in buttons) {
+      button.x = (width - button.width) / 2;
+      button.y = verticalIndex;
+      addChild(button);
+      verticalIndex += button.height + 4;
+    }
+  }
+
+  private function onPlayPressed(event:Event):Void {
+    trace("Play button pressed!");
+  }
+
+  private function onLeaderboardPressed(event:Event):Void {
+    trace("Leaderboard button pressed!");
   }
 }
