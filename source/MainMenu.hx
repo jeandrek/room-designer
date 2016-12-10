@@ -23,16 +23,21 @@ class MainMenu extends GameState {
   
   private function drawMenu():Void {
     verticalIndex = 0;
-    width = Lib.current.stage.stageWidth;
-    height = Lib.current.stage.stageHeight;
+    addBackground();
     addLogo();
     addButtons();
+  }
+
+  private function addBackground():Void {
+    graphics.beginFill(0xfff8ea);
+    graphics.drawRect(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
+    graphics.endFill();
   }
 
   private function addLogo():Void {
     // Scale the logo to fit on the stage.
     var logo:BitmapData = Assets.getBitmapData("assets/logo.png");
-    var scale:Float = width / logo.width;
+    var scale:Float = Lib.current.stage.stageWidth / logo.width;
     var matrix:Matrix = new Matrix();
     var scaledLogo:BitmapData =
         new BitmapData(Math.floor(logo.width * scale),
@@ -52,7 +57,7 @@ class MainMenu extends GameState {
          new Button("Leaderboard", onLeaderboardPressed)];
     // Display them all.
     for (button in buttons) {
-      button.x = (width - button.width) / 2;
+      button.x = (Lib.current.stage.stageWidth - button.width) / 2;
       button.y = verticalIndex;
       addChild(button);
       verticalIndex += button.height + 4;
