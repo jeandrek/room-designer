@@ -3,7 +3,7 @@ package;
 import openfl.display.*;
 import openfl.text.*;
 
-class Main extends Sprite {
+class Game extends Sprite {
   private var state:GameState = null;
 
   public function new () {
