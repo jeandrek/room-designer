@@ -6,14 +6,16 @@ import openfl.geom.*;
 import openfl.events.*;
 
 class MainMenu extends GameState {
+  private var verticalIndex:Float;
+  private var buttons:Array<Button>;
+
   public function new (game:Game) {
     super (game);
-    addEventListener(GameStateEvent.DRAW_STATE, onDrawMenu);
+    makeButtons();
+    addEventListener(GameStateEvent.DRAW_STATE, onDrawState);
   }
-
-  private var verticalIndex:Float;
   
-  private function onDrawMenu(event:Event):Void {
+  private function onDrawState(event:Event):Void {
     verticalIndex = 0;
     addLogo();
     addButtons();
@@ -35,11 +37,12 @@ class MainMenu extends GameState {
     verticalIndex += logo.height * scale;
   }
 
-  private function addButtons():Void {
-    // Make all the buttons.
-    var buttons:Array<Button> =
+  private function makeButtons():Void {
+    buttons =
         [new Button("Play!", onPlayPressed)];
-    // Display them all.
+  }
+
+  private function addButtons():Void {
     for (button in buttons) {
       button.x = (stage.stageWidth - button.width) / 2;
       button.y = verticalIndex;

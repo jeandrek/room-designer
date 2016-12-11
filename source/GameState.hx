@@ -18,7 +18,8 @@ class GameState extends Sprite {
   }
 
   private function addBackground():Void {
-    graphics.beginFill(0xfff8ea);
+    graphics.clear();
+    graphics.beginFill(GameColors.GAME_BACKGROUND_COLOR);
     graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
     graphics.endFill();
   }

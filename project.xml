@@ -2,7 +2,7 @@
 <project>
   <meta title="Room Designer" package="jonathan50.room-designer" version="0.1.0" company="Jonathan50" />
   <app main="Game" path="export" file="room-designer" />
-  <window width="480" height="360" />
+  <window width="480" height="360" unless="html5" />
   <source path="source" />
   <haxelib name="openfl" />
   <assets path="assets" />

@@ -18,7 +18,7 @@ class Button extends Sprite {
     addChild(upState);
     addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
     addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-    addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+    addEventListener(MouseEvent.CLICK, onClick);
     if (onPress != null)
       addEventListener(ButtonEvent.BUTTON_PRESS, onPress);
   }
@@ -61,7 +61,7 @@ class Button extends Sprite {
     addChild(upState);
   }
 
-  private function onMouseUp(event:Event):Void {
+  private function onClick(event:Event):Void {
     dispatchEvent(new ButtonEvent(ButtonEvent.BUTTON_PRESS));
   }
 }
