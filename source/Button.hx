@@ -10,7 +10,7 @@ class Button extends Sprite {
   private var upState:Sprite;
   private var downState:Sprite;
 
-  public function new (text:String, onPress:Event -> Void) {
+  public function new (text:String, ?onPress:Event -> Void) {
     super ();
     buttonMode = true;
     upState = makeState(Assets.getBitmapData("assets/button-up.png"), text);
@@ -18,7 +18,9 @@ class Button extends Sprite {
     addChild(upState);
     addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
     addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-    addEventListener(MouseEvent.MOUSE_UP, onPress);
+    addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+    if (onPress != null)
+      addEventListener(ButtonEvent.BUTTON_PRESS, onPress);
   }
 
   private function makeState(image:BitmapData, text:String):Sprite {
@@ -57,5 +59,9 @@ class Button extends Sprite {
   private function onMouseOut(event:Event):Void {
     removeChild(downState);
     addChild(upState);
+  }
+
+  private function onMouseUp(event:Event):Void {
+    dispatchEvent(new ButtonEvent(ButtonEvent.BUTTON_PRESS));
   }
 }

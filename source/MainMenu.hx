@@ -6,38 +6,23 @@ import openfl.geom.*;
 import openfl.events.*;
 
 class MainMenu extends GameState {
-  public function new () {
-    super ();
-    drawMenu();
-    Lib.current.stage.addEventListener(Event.RESIZE, onStageResize);
-  }
-
-  private function onStageResize(event:Event):Void {
-    // Remove everything on the menu.
-    while (numChildren > 0) removeChildAt(0);
-    // Redraw the menu.
-    drawMenu();
+  public function new (game:Game) {
+    super (game);
+    addEventListener(GameStateEvent.DRAW_STATE, onDrawMenu);
   }
 
   private var verticalIndex:Float;
   
-  private function drawMenu():Void {
+  private function onDrawMenu(event:Event):Void {
     verticalIndex = 0;
-    addBackground();
     addLogo();
     addButtons();
-  }
-
-  private function addBackground():Void {
-    graphics.beginFill(0xfff8ea);
-    graphics.drawRect(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
-    graphics.endFill();
   }
 
   private function addLogo():Void {
     // Scale the logo to fit on the stage.
     var logo:BitmapData = Assets.getBitmapData("assets/logo.png");
-    var scale:Float = Lib.current.stage.stageWidth / logo.width;
+    var scale:Float = stage.stageWidth / logo.width;
     var matrix:Matrix = new Matrix();
     var scaledLogo:BitmapData =
         new BitmapData(Math.floor(logo.width * scale),
@@ -53,11 +38,10 @@ class MainMenu extends GameState {
   private function addButtons():Void {
     // Make all the buttons.
     var buttons:Array<Button> =
-        [new Button("Play!", onPlayPressed),
-         new Button("Leaderboard", onLeaderboardPressed)];
+        [new Button("Play!", onPlayPressed)];
     // Display them all.
     for (button in buttons) {
-      button.x = (Lib.current.stage.stageWidth - button.width) / 2;
+      button.x = (stage.stageWidth - button.width) / 2;
       button.y = verticalIndex;
       addChild(button);
       verticalIndex += button.height + 4;
@@ -65,10 +49,6 @@ class MainMenu extends GameState {
   }
 
   private function onPlayPressed(event:Event):Void {
-    trace("Play button pressed!");
-  }
-
-  private function onLeaderboardPressed(event:Event):Void {
-    trace("Leaderboard button pressed!");
+    game.useState(new Room(game));
   }
 }
