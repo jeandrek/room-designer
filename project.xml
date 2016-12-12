@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-  <meta title="Room Designer" package="jonathan50.room-designer" version="0.1.0" company="Jonathan50" />
+  <meta title="Room Designer" package="jonathan50.roomdesigner" version="0.1.0" company="Jonathan50" />
   <app main="Game" path="export" file="room-designer" />
   <window width="683" height="512" unless="html5" />
   <source path="source" />
