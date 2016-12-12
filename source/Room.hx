@@ -33,6 +33,7 @@ class Room extends GameState {
   private var storeShowing:Bool;
   private var challengesShowing:Bool;
   private var dialog:Dialog;
+  private var tooltip:Tooltip;
 
   public function new (game:Game) {
     super (game);
@@ -41,6 +42,7 @@ class Room extends GameState {
     storeShowing = false;
     challengesShowing = false;
     dialog = null;
+    tooltip = null;
     makeChildren();
     addEventListener(GameStateEvent.DRAW_STATE, onDrawState);
     addEventListener(MouseEvent.CLICK, onClick);
@@ -48,17 +50,21 @@ class Room extends GameState {
 
   private function makeChildren():Void {
     store = new Store(this);
-    challenges = new Challenges(this);
     storeButton = new Button("Store", onStorePressed);
+    storeButton.x = 4;
+    storeButton.y = 4;
+    challenges = new Challenges(this);
     challengesButton = new Button("Challenges", onChallengesPressed);
+    challengesButton.x = 4;
     exitButton = new Button("Exit", onExitPressed);
-    showHelp();
+    exitButton.y = 4;
+    addHelp();
   }
 
-  private function showHelp():Void {
-    showDialog(new Dialog("Welcome to Room Designer!\n\n" +
-                          "Press CHALLENGES to see your current objective.\n\n" +
-                          "Press STORE to purchase items to decorate your room.\n\n"));
+  private function addHelp():Void {
+    addDialog(new Dialog("Welcome to Room Designer!\n\n" +
+                         "Press CHALLENGES to see your current objective.\n\n" +
+                         "Press STORE to purchase items to decorate your room.\n\n"));
   }
 
   private function onDrawState(event:Event):Void {
@@ -69,17 +75,17 @@ class Room extends GameState {
       addChild(challenges);
       challenges.dispatchEvent(event);
     } else {
-      challengesButton.y = Lib.current.stage.stageHeight - challengesButton.height;
+      challengesButton.y = Lib.current.stage.stageHeight - challengesButton.height - 2;
       addChild(storeButton);
       addChild(challengesButton);
     }
-    exitButton.x = Lib.current.stage.stageWidth - exitButton.width;
+    exitButton.x = Lib.current.stage.stageWidth - exitButton.width - 4;
     addChild(exitButton);
     addItems();
     if (dialog != null) {
       addChild(dialog);
       dialog.dispatchEvent(event);
-    }
+    } else if (tooltip != null) addChild(tooltip);
   }
 
   private function addItems():Void {
@@ -141,19 +147,27 @@ class Room extends GameState {
   }
 
   public function showCompletion(reward:Int):Void {
-    showDialog(new Dialog('You have completed a challenge!\n\n' +
-                          'You have been rewarded with $$$reward.\n\n' +
-                          'Press CHALLENGES to see your new objective.'));
+    addDialog(new Dialog('You have completed a challenge!\n\n' +
+                         'You have been rewarded with $$$reward.\n\n' +
+                         'Press CHALLENGES to see your new objective.'));
     drawState();
   }
 
-  private function showDialog(dialog2:Dialog):Void {
-    storeShowing = false;
-    challengesShowing = false;
+  private function addDialog(dialog2:Dialog):Void {
     dialog = dialog2;
     dialog.addEventListener(DialogEvent.OKAY_PRESSED, function (event:Event):Void {
       dialog = null;
       drawState();
     });
+  }
+
+  public function addTooltip(tooltip2:Tooltip):Void {
+    tooltip = tooltip2;
+    drawState();
+  }
+
+  public function removeTooltip():Void {
+    tooltip = null;
+    drawState();
   }
 }

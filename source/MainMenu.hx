@@ -58,9 +58,9 @@ class MainMenu extends GameState {
   private function makeButtons():Void {
     buttons =
       [new Button("Play!", onPlayPressed),
-       #if !(html5 || flash)
-         new Button("Quit", onQuitPressed)
-       #end];
+#if !(html5 || flash)
+       new Button("Quit", onQuitPressed)
+#end];
   }
 
   private function addButtons():Void {

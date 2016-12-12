@@ -25,11 +25,17 @@ class Tooltip extends Sprite {
   private var text:String;
   private var textField:TextField;
 
-  public function new (text2:String) {
+  public function new (text2:String, object:DisplayObject) {
     super ();
     text = text2;
     makeTextField();
+#if mobile
+    x = object.x + object.width / 2;
+    y = object.y + object.height / 2;
+    drawTooltip();
+#else
     addEventListener(Event.ENTER_FRAME, onEnterFrame);
+#end
   }
 
   private function makeTextField():Void {
@@ -42,14 +48,20 @@ class Tooltip extends Sprite {
     textField.y = 0;
   }
 
+#if (!mobile)
   private function onEnterFrame(event:Event):Void {
     if (stage != null) {
       x = stage.mouseX;
       y = stage.mouseY;
       if (numChildren > 0) removeChild(textField);
-      addBackground();
-      addChild(textField);
+      drawTooltip();
     }
+  }
+#end
+
+  private function drawTooltip():Void {
+    addBackground();
+    addChild(textField);
   }
 
   private function addBackground():Void {

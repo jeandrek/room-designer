@@ -33,9 +33,9 @@ class Item extends Sprite {
   public var itemName:String;
   public var price:Int;
   private var image:BitmapData;
-  private var template:Bool;
+  public var template:Bool;
   private var room:Room;
-  private var tooltip:Tooltip;
+  private var dragging:Bool;
   private var startX:Float;
   private var startY:Float;
 
@@ -45,12 +45,17 @@ class Item extends Sprite {
     price = price2;
     template = template2;
     room = room2;
-    buttonMode = template;
     image = Assets.getBitmapData('assets/images/$itemName.png');
     addChild(new Bitmap(scaleBitmap(image, template)));
     if (template) {
+      buttonMode = true;
+      dragging = false;
+#if mobile
+      addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+#else
       addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
       addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+#end
       addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
       addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
     }
@@ -68,29 +73,44 @@ class Item extends Sprite {
     return scaledImage;
   }
 
+#if mobile
+  private function onAddedToStage(event:Event):Void {
+    stage.addEventListener(MouseEvent.CLICK, onStageTapped);
+  }
+
+  private function onStageTapped(event:Event):Void {
+    if (!Std.is(event.target, Item)) hidePrice();
+  }
+#else
   private function onMouseOver(event:Event):Void {
-    tooltip = new Tooltip('Price: $$$price');
-    room.addChild(tooltip);
+    if (!dragging) showPrice();
   }
 
   private function onMouseOut(event:Event):Void {
-    room.removeChild(tooltip);
-    tooltip = null;
+    hidePrice();
   }
+#end
 
   private function onMouseDown(event:Event):Void {
     if (room.canAfford(this)) {
-      room.removeChild(tooltip);
-      tooltip = null;
+      hidePrice();
       startX = x;
       startY = y;
+      dragging = true;
       startDrag();
     }
   }
 
   private function onMouseUp(event:Event):Void {
-    if (room.canAfford(this)) {
+    if (dragging) {
       stopDrag();
+      dragging = false;
+      if (startX == x && startY == y) {
+#if mobile
+        showPrice();
+#end
+        return;
+      }
       var newItem:Item = new Item(itemName, price, false, room);
       newItem.x = x;
       newItem.y = y;
@@ -98,5 +118,13 @@ class Item extends Sprite {
       y = startY;
       room.purchase(newItem);
     }
+  }
+
+  private function showPrice():Void {
+    room.addTooltip(new Tooltip('Price $$$price', this));
+  }
+
+  private function hidePrice():Void {
+    room.removeTooltip();
   }
 }
