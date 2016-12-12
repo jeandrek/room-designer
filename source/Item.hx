@@ -33,7 +33,7 @@ class Item extends Sprite {
   public var itemName:String;
   public var price:Int;
   private var image:BitmapData;
-  public var template:Bool;
+  private var template:Bool;
   private var room:Room;
   private var dragging:Bool;
   private var startX:Float;
