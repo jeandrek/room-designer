@@ -1,6 +1,7 @@
 package;
 
 import openfl.*;
+import openfl.system.*;
 import openfl.display.*;
 import openfl.geom.*;
 import openfl.events.*;
@@ -14,7 +15,7 @@ class MainMenu extends GameState {
     makeButtons();
     addEventListener(GameStateEvent.DRAW_STATE, onDrawState);
   }
-  
+
   private function onDrawState(event:Event):Void {
     verticalIndex = 0;
     addLogo();
@@ -23,13 +24,13 @@ class MainMenu extends GameState {
 
   private function addLogo():Void {
     // Scale the logo to fit on the stage.
-    var logo:BitmapData = Assets.getBitmapData("assets/logo.png");
+    var logo:BitmapData = Assets.getBitmapData("assets/images/logo.png");
     var scale:Float = stage.stageWidth / logo.width;
     var matrix:Matrix = new Matrix();
     var scaledLogo:BitmapData =
-        new BitmapData(Math.floor(logo.width * scale),
-                       Math.floor(logo.height * scale),
-                       true, 0x000000);
+      new BitmapData(Math.floor(logo.width * scale),
+                     Math.floor(logo.height * scale),
+                     true, 0x000000);
     matrix.scale(scale, scale);
     scaledLogo.draw(logo, matrix, null, null, null, true);
     // Display the scaled logo.
@@ -39,7 +40,10 @@ class MainMenu extends GameState {
 
   private function makeButtons():Void {
     buttons =
-        [new Button("Play!", onPlayPressed)];
+      [new Button("Play!", onPlayPressed),
+       #if !(html5 || flash)
+         new Button("Quit", onQuitPressed)
+       #end];
   }
 
   private function addButtons():Void {
@@ -53,5 +57,9 @@ class MainMenu extends GameState {
 
   private function onPlayPressed(event:Event):Void {
     game.useState(new Room(game));
+  }
+
+  private function onQuitPressed(event:Event):Void {
+    System.exit(0);
   }
 }

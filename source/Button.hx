@@ -13,8 +13,8 @@ class Button extends Sprite {
   public function new (text:String, ?onPress:Event -> Void) {
     super ();
     buttonMode = true;
-    upState = makeState(Assets.getBitmapData("assets/button-up.png"), text);
-    downState = makeState(Assets.getBitmapData("assets/button-down.png"), text);
+    upState = makeState(Assets.getBitmapData("assets/images/button-up.png"), text);
+    downState = makeState(Assets.getBitmapData("assets/images/button-down.png"), text);
     addChild(upState);
     addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
     addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);

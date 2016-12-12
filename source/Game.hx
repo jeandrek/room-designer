@@ -9,6 +9,7 @@ class Game extends Sprite {
 
   public function new () {
     super ();
+    Item.addItemTypes();
     useState(new MainMenu(this));
   }
 

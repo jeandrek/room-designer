@@ -1,0 +1,5 @@
+[{"name": "tile", "price": 5},
+ {"name": "lamp", "price": 40},
+ {"name": "table", "price": 400},
+ {"name": "chair", "price": 100},
+ {"name": "cushion", "price": 15}]

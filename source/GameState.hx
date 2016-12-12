@@ -1,5 +1,6 @@
 package;
 
+import openfl.*;
 import openfl.display.*;
 import openfl.events.*;
 
@@ -20,7 +21,7 @@ class GameState extends Sprite {
   private function addBackground():Void {
     graphics.clear();
     graphics.beginFill(GameColors.GAME_BACKGROUND_COLOR);
-    graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+    graphics.drawRect(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
     graphics.endFill();
   }
 }
