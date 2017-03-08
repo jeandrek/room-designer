@@ -79,21 +79,21 @@ class Item extends Sprite {
   }
 
   private function onStageTapped(event:Event):Void {
-    if (!Std.is(event.target, Item)) hidePrice();
+    if (!Std.is(event.target, Item)) hideTooltip();
   }
 #else
   private function onMouseOver(event:Event):Void {
-    if (!dragging) showPrice();
+    if (!dragging) showTooltip();
   }
 
   private function onMouseOut(event:Event):Void {
-    hidePrice();
+    hideTooltip();
   }
 #end
 
   private function onMouseDown(event:Event):Void {
     if (room.canAfford(this)) {
-      hidePrice();
+      hideTooltip();
       startX = x;
       startY = y;
       dragging = true;
@@ -107,7 +107,7 @@ class Item extends Sprite {
       dragging = false;
       if (startX == x && startY == y) {
 #if mobile
-        showPrice();
+        showTooltip();
 #end
         return;
       }
@@ -120,11 +120,15 @@ class Item extends Sprite {
     }
   }
 
-  private function showPrice():Void {
-    room.addTooltip(new Tooltip('Price $$$price', this));
+  private function showTooltip():Void {
+    var displayName:String;
+    displayName =
+      itemName.substr(0, 1).toUpperCase() +
+      itemName.substr(1, itemName.length);
+    room.addTooltip(new Tooltip('$displayName: $$$price', this));
   }
 
-  private function hidePrice():Void {
+  private function hideTooltip():Void {
     room.removeTooltip();
   }
 }
